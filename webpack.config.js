@@ -42,6 +42,10 @@ module.exports = {
          context: './src/',
          from: '**/*',
          ignore: ['scripts/**/*', 'styles/**/*']
+      }, {
+         context: './node_modules/jsxc/dist/',
+         from: '**/*',
+         to: 'jsxc/'
       }]),
       extractSass
    ]
