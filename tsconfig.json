@@ -1,0 +1,16 @@
+{
+    "allowJs": true,
+    "compilerOptions": {
+        "module": "es6",
+        "outDir": "./dist",
+        "target": "es5",
+        "lib": ["DOM", "ES2015", "ES2015.Promise", "ES5", "ScriptHost"]
+    },
+    "include": [
+        "./src/scripts/**/*.ts"
+    ],
+    "exclude": [
+       "node_modules",
+       "typings"
+    ]
+}
