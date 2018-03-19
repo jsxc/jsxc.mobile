@@ -4,7 +4,17 @@
         "module": "es6",
         "outDir": "./dist",
         "target": "es5",
-        "lib": ["DOM", "ES2015", "ES2015.Promise", "ES5", "ScriptHost"]
+        "lib": ["DOM", "ES2015", "ES2015.Promise", "ES5", "ScriptHost"],
+        "jsx": "react",
+        "allowJs": true,
+        "module": "esnext",
+    "target": "es5",
+    "lib": ["es6", "dom"],
+    "sourceMap": true,
+    "allowJs": true,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "rootDir": "src"
     },
     "include": [
         "./src/scripts/**/*.ts"

@@ -14,7 +14,7 @@ module.exports = {
    entry: ['./src/styles/index.scss', './src/scripts/index.ts'],
    module: {
       rules: [{
-         test: /\.ts$/,
+         test: /\.tsx?$/,
          use: 'ts-loader',
          exclude: /node_modules/
       }, {
@@ -30,7 +30,7 @@ module.exports = {
       }]
    },
    resolve: {
-      extensions: ['.ts', '.js']
+      extensions: ['.ts', '.tsx', '.js']
    },
    output: {
       filename: 'scripts/[name].bundle.js',
@@ -46,6 +46,10 @@ module.exports = {
          context: './node_modules/jsxc/dist/',
          from: '**/*',
          to: 'jsxc/'
+      }, {
+         context: './node_modules/jsxc-plugin-single-page/dist/',
+         from: '**/*',
+         to: 'account-manager/'
       }]),
       extractSass
    ]

@@ -12,9 +12,12 @@
     "author": "Apache Cordova Team",
     "license": "Apache-2.0",
     "dependencies": {
+        "@types/react": "^16.0.36",
+        "@types/react-dom": "^16.0.3",
         "browser-sync": "^2.23.6",
         "cheerio": "^0.19.0",
         "cordova-android": "7.0.0",
+        "cordova-browser": "^5.0.3",
         "cordova-plugin-badge": "^0.8.7",
         "cordova-plugin-browsersync": "github:nparashuram/cordova-plugin-browsersync",
         "cordova-plugin-device": "^2.0.1",
@@ -25,15 +28,18 @@
         "elementtree": "^0.1.7",
         "glob": "^5.0.15",
         "jsxc": "github:jsxc/jsxc#refactoring",
+        "jsxc-plugin-single-page": "github:jsxc/jsxc-plugin-single-page",
+        "material-ui": "^1.0.0-beta.32",
         "npm": "^2.15.12",
         "plist": "^1.2.0",
-        "q": "^1.5.1"
+        "q": "^1.5.1",
+        "react": "^16.2.0",
+        "react-dom": "^16.2.0"
     },
     "cordova": {
         "plugins": {
             "cordova-plugin-whitelist": {},
             "cordova-plugin-local-notification": {},
-            "cordova-plugin-browsersync": {},
             "cordova-plugin-splashscreen": {}
         },
         "platforms": [
