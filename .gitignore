@@ -72,3 +72,6 @@ plugins
 
 # Editors
 .vscode
+
+# macOS
+.DS_Store
