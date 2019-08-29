@@ -66,5 +66,9 @@ typings/
 .env
 .env.test
 
+# Cordova
+platforms
+plugins
+
 # Editors
 .vscode
