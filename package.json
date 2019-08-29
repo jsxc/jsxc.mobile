@@ -3,15 +3,18 @@
   "version": "0.1.0",
   "main": "index.js",
   "scripts": {
+    "start": "phonegap serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "cordova-browser": "^6.0.0"
+    "cordova-browser": "^6.0.0",
+    "cordova-plugin-whitelist": "1"
   },
   "devDependencies": {
-    "cordova-plugin-whitelist": "^1.3.4",
+    "cordova": "^9.0.0",
     "husky": "^3.0.4",
     "lint-staged": "^9.2.5",
+    "phonegap": "^8.2.2",
     "prettier": "^1.18.2"
   },
   "cordova": {
