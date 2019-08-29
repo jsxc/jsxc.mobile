@@ -5,10 +5,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "dependencies": {
+    "cordova-browser": "^6.0.0"
+  },
   "devDependencies": {
+    "cordova-plugin-whitelist": "^1.3.4",
     "husky": "^3.0.4",
     "lint-staged": "^9.2.5",
     "prettier": "^1.18.2"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {}
+    },
+    "platforms": [
+      "browser"
+    ]
   },
   "husky": {
     "hooks": {
