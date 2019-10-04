@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@capacitor/android": "^1.2.1",
+    "@capacitor/core": "1.2.1",
+    "@capacitor/ios": "^1.2.1",
     "@ionic/react": "^4.10.0-rc.3",
     "@ionic/react-router": "^4.10.0-rc.3",
     "@jsxc/jsxc": "^4.0.0-rc.1",
@@ -40,5 +43,8 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "description": "An Ionic project"
+  "description": "An Ionic project",
+  "devDependencies": {
+    "@capacitor/cli": "1.2.1"
+  }
 }
