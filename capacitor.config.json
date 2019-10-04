@@ -3,8 +3,5 @@
   "appName": "jsxc-mobile",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "build",
-  "server": {
-    "url": "http://134.34.231.240:8100"
-  }
+  "webDir": "build"
 }
