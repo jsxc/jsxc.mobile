@@ -32,7 +32,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "sync-android": "ionic capacitor copy android",
+    "sync-ios": "ionic capacitor copy ios",
+    "open-android": "ionic capacitor open android",
+    "open-ios": "ionic capacitor open ios"
   },
   "eslintConfig": {
     "extends": "react-app"
