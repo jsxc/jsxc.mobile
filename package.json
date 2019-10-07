@@ -1,7 +1,16 @@
 {
   "name": "jsxc-mobile",
   "version": "0.0.1",
-  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "sync-android": "ionic capacitor copy android",
+    "sync-ios": "ionic capacitor copy ios",
+    "open-android": "ionic capacitor open android",
+    "open-ios": "ionic capacitor open ios"
+  },
   "dependencies": {
     "@capacitor/android": "^1.2.1",
     "@capacitor/core": "1.2.1",
@@ -28,15 +37,8 @@
     "react-scripts": "3.1.2",
     "typescript": "3.6.3"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "sync-android": "ionic capacitor copy android",
-    "sync-ios": "ionic capacitor copy ios",
-    "open-android": "ionic capacitor open android",
-    "open-ios": "ionic capacitor open ios"
+  "devDependencies": {
+    "@capacitor/cli": "1.2.1"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -46,9 +48,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "description": "An Ionic project",
-  "devDependencies": {
-    "@capacitor/cli": "1.2.1"
-  }
+  ]
 }
