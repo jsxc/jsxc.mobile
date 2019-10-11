@@ -3,7 +3,7 @@ import { TextField, Button } from '@material-ui/core';
 import { withStyles, createStyles } from '@material-ui/styles';
 import { KeyboardArrowRight } from '@material-ui/icons';
 import classNames from 'classnames';
-import { AccountManager } from '../utils';
+import { AccountManager, httpGET } from '../utils';
 import ImageLogo from '../assets/jsxc-icon-white.svg';
 
 const styles = ({ spacing }) =>
@@ -54,7 +54,6 @@ const styles = ({ spacing }) =>
     },
   });
 
-const URLPREFIX = 'https://';
 const STATUS = {
   Idle: 0,
   Connecting: 1,
@@ -65,55 +64,66 @@ class AddAccount extends React.Component<any, any> {
   state = {
     status: STATUS.Idle,
     warning: '',
-    url: '',
     jid: '',
     password: '',
+  };
+
+  /**
+   *  Fetches the BOSH URL for a given domain
+   */
+  fetchBoshUrl = async (domain: string): Promise<string> => {
+    try {
+      const response = await httpGET(
+        /* https://github.com/ar-maged/XCDaaS */
+        `https://xcdaas.now.sh/api/discover/${domain}`,
+      );
+
+      return response.data.services.xbosh[0].server;
+    } catch (error) {
+      console.error('Could not fetch BOSH URL for domain: ' + domain);
+    }
   };
 
   onChange = name => ev => {
     let value = ev.target.value;
 
-    if (name === 'url') {
-      value = this.hasHTTPSPrefix(value) ? value : URLPREFIX + value;
-    }
-
     this.setState({ [name]: value });
     this.setState({ warning: '' });
   };
 
-  onSubmit = ev => {
+  onSubmit = async ev => {
     ev.preventDefault();
 
     this.setState({ status: STATUS.Connecting });
 
-    const { url, jid, password } = this.state;
+    const { jid, password } = this.state;
+
     const domain = this.getDomainFromJid(jid);
 
-    (window as any).JSXC.testBOSHServer(url, domain)
-      .then(() => {
-        return this.props.jsxc.start(url, jid, password);
-      })
-      .then(() => {
-        AccountManager.get().add(url, jid, password);
+    try {
+      const url = await this.fetchBoshUrl(domain);
 
-        this.setState({ status: STATUS.Connected });
+      await (window as any).JSXC.testBOSHServer(url, domain);
+      await this.props.jsxc.start(url, jid, password);
 
-        this.props.onConnected();
-      })
-      .catch(error => {
-        if (typeof error === 'string') {
-          this.setState({ warning: error });
-        } else if (error.message) {
-          this.setState({ warning: error.message });
-        } else {
-          this.setState({
-            warning:
-              'Sorry we could not connect. Maybe your Jabber ID or password is wrong.',
-          });
-        }
+      AccountManager.get().add(url, jid, password);
 
-        this.setState({ status: STATUS.Idle });
-      });
+      this.setState({ status: STATUS.Connected });
+      this.props.onConnected();
+    } catch (error) {
+      if (typeof error === 'string') {
+        this.setState({ warning: error });
+      } else if (error.message) {
+        this.setState({ warning: error.message });
+      } else {
+        this.setState({
+          warning:
+            'Sorry we could not connect. Maybe your Jabber ID or password is wrong.',
+        });
+      }
+
+      this.setState({ status: STATUS.Idle });
+    }
   };
 
   getDomainFromJid(jid) {
@@ -122,17 +132,9 @@ class AddAccount extends React.Component<any, any> {
     return parts[1];
   }
 
-  hasHTTPSPrefix(url = '') {
-    for (let i = 0; i < url.length && i < URLPREFIX.length; i++) {
-      if (url[i] !== URLPREFIX[i]) return false;
-    }
-
-    return true;
-  }
-
   render() {
     const { classes } = this.props;
-    const { status, url } = this.state;
+    const { status } = this.state;
     const disabled = status === STATUS.Connecting;
     let buttonLabel = disabled ? 'Connecting...' : 'Connect';
 
@@ -146,21 +148,6 @@ class AddAccount extends React.Component<any, any> {
           />
 
           <form onSubmit={this.onSubmit}>
-            <TextField
-              autoFocus
-              disabled={disabled}
-              required
-              label="BOSH Url"
-              value={url}
-              onChange={this.onChange('url')}
-              InputProps={{
-                className: classes.field,
-              }}
-              InputLabelProps={{
-                className: classes.label,
-              }}
-              fullWidth
-            />
             <TextField
               type="email"
               disabled={disabled}
