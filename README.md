@@ -17,7 +17,7 @@
 - [Node.js](https://nodejs.org/en) `v10.15.3`
 - [Ionic CLI](https://ionicframework.com/docs/cli) `v5.4.2`
 
-## Running
+### Running
 
 - `❯ npm install`
 - `❯ npm start`
