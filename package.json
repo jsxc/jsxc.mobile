@@ -18,7 +18,20 @@
     "@types/react": "^16.8.23",
     "@types/react-native": "^0.57.65",
     "babel-preset-expo": "^7.0.0",
+    "husky": "^3.0.8",
+    "lint-staged": "^9.4.2",
+    "prettier": "^1.18.2",
     "typescript": "^3.4.5"
   },
-  "private": true
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,json,css,md}": [
+      "prettier --single-quote --trailing-comma all --write",
+      "git add"
+    ]
+  }
 }
