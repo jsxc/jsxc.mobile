@@ -1,7 +1,0 @@
-{
-  "appId": "org.jsxc.mobile",
-  "appName": "jsxc-mobile",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "build"
-}
