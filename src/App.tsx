@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { useXMPP } from './hooks';
 
-export default function App() {
+const App = () => {
   const url = 'https://example.com:5280/http-bind/';
   const username = 'john.doe@example.com';
   const password = '123456';
@@ -32,7 +32,7 @@ export default function App() {
       ))}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -47,3 +47,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default App;
