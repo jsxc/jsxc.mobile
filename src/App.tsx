@@ -1,26 +1,35 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Strophe } from 'strophe.js';
-import { decodeConnectionStatusConstant } from './xmpp';
-
-const { Connection } = Strophe;
+import React from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
+import { useXMPP } from './hooks';
 
 export default function App() {
-  useEffect(() => {
-    const url = 'https://example.com:5280/http-bind/';
-    const username = 'john.doe@example.com';
-    const password = '123456';
+  const url = 'https://example.com:5280/http-bind/';
+  const username = 'john.doe@example.com';
+  const password = '123456';
 
-    const connection = new Connection(url);
+  const [state, actions] = useXMPP({ url, username, password });
 
-    connection.connect(username, password, status => {
-      console.log('onConnect >', decodeConnectionStatusConstant(status));
-    });
-  }, []);
+  const { connection, data } = state;
+  const { sendMessage } = actions;
 
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+      <Text style={styles.text}>Connection Status: {connection.status}</Text>
+
+      <Button
+        title="Send message"
+        onPress={() => {
+          sendMessage(Date.now().toString());
+        }}
+      />
+
+      <Text style={styles.text}>Received messages: </Text>
+
+      {data.receivedMessages.map((message, index) => (
+        <Text key={index} style={styles.text}>
+          {message.textContent}
+        </Text>
+      ))}
     </View>
   );
 }
@@ -31,5 +40,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  text: {
+    margin: 8,
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
