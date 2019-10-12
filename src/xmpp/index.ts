@@ -1,6 +1,75 @@
-import { Strophe } from 'strophe.js';
+import { Strophe, $msg } from 'strophe.js';
 
-const { Status } = Strophe;
+const { Connection, Status } = Strophe;
+
+/**
+ *  Establishes a connection with an
+ *  XMPP server using given credentials.
+ */
+export const connect = ({
+  url,
+  username,
+  password,
+  onConnectionStatusChange,
+  onMessageReceived,
+}: {
+  url: string;
+  username: string;
+  password: string;
+  onConnectionStatusChange?: (status: string) => void;
+  onMessageReceived?: (message: Element) => void;
+}): Strophe.Connection => {
+  const connection = new Connection(url);
+
+  connection.connect(username, password, status => {
+    if (status === Status.CONNECTED) {
+      if (onMessageReceived) {
+        connection.addHandler(
+          message => {
+            onMessageReceived(message);
+            return true;
+          },
+          null,
+          'message',
+          null,
+          null,
+          null,
+        );
+      }
+    }
+
+    if (onConnectionStatusChange) {
+      onConnectionStatusChange(decodeConnectionStatus(status));
+    }
+  });
+
+  return connection;
+};
+
+/**
+ *  Sends a direct message to a recipient.
+ */
+export const sendMessage = ({
+  connection,
+  from,
+  to,
+  text,
+}: {
+  connection: Strophe.Connection;
+  from: string;
+  to: string;
+  text: string;
+}): void => {
+  const message = $msg({
+    type: 'chat',
+    from,
+    to,
+  })
+    .c('body')
+    .t(text);
+
+  connection.send(message);
+};
 
 /**
  *  Maps a Strophe connection status constant
@@ -8,7 +77,7 @@ const { Status } = Strophe;
  *
  *  http://strophe.im/strophejs/doc/1.3.4/files/strophe-umd-js.html#Strophe.Connection_Status_Constants
  */
-export const decodeConnectionStatusConstant = (status: number): string => {
+export const decodeConnectionStatus = (status: Strophe.Status): string => {
   switch (status) {
     case Status.ERROR:
       return 'ERROR';
