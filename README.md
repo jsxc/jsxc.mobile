@@ -5,7 +5,7 @@
 <h1 align="center">JSXC Mobile</h1>
 
 <div align="center">
-  <b>An <a href="https://xmpp.org">XMPP</a> client built with <a href="https://ionicframework.com">Ionic</a></b>
+  <b>An <a href="https://xmpp.org">XMPP</a> client built with <a href="https://ionicframework.com">Ionic</a> & <a href="https://capacitor.ionicframework.com">Capacitor</a></b>
 </div>
 
 <br />
