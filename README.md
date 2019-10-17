@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/11808903/66665227-6786c300-ec4e-11e9-808d-92e0f86ea89e.png" width="100"/>
+  <img src="https://user-images.githubusercontent.com/11808903/67002091-68e73e00-f0db-11e9-8a21-63d776796b4b.png" width="100"/>
 </p>
 
 <h1 align="center">JSXC Mobile</h1>
