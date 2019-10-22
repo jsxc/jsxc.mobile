@@ -1,4 +1,6 @@
 import React from 'react';
+import { ApplicationProvider as StylesProvider } from 'react-native-ui-kitten';
+import { mapping, light as lightTheme } from '@eva-design/eva';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { Login, Chats } from './screens';
 
@@ -19,7 +21,11 @@ const App = () => {
 
   const AppContainer = createAppContainer(AppNavigator);
 
-  return <AppContainer />;
+  return (
+    <StylesProvider mapping={mapping} theme={lightTheme}>
+      <AppContainer />
+    </StylesProvider>
+  );
 };
 
 export default App;
