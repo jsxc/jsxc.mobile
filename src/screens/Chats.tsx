@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
-import { Layout, Text, Avatar, ListItem } from 'react-native-ui-kitten';
+import { View, StyleSheet } from 'react-native';
+import { Layout, Text, Avatar, List, ListItem } from 'react-native-ui-kitten';
 import { useXmpp } from '../xmpp';
 
 const Chats = () => {
@@ -12,7 +12,7 @@ const Chats = () => {
         Contacts
       </Text>
 
-      <FlatList
+      <List
         data={state.data.contacts}
         renderItem={({ item }) => (
           <ListItem style={styles.listItem}>
