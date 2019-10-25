@@ -1,4 +1,6 @@
-import { Strophe, $msg } from 'strophe.js';
+import { Strophe, $msg, $iq } from 'strophe.js';
+import { parseXml } from '../utilities';
+import { Dictionary } from '../types';
 
 const { Connection, Status } = Strophe;
 
@@ -15,9 +17,14 @@ export type ConnectionStatus =
   | 'REDIRECT'
   | 'CONNTIMEOUT';
 
+export type Contact = {
+  jid: string;
+  name?: string;
+};
+
 /**
- *  Establishes a connection with an
- *  XMPP server using given credentials.
+ *  Establishes a connection with XMPP
+ *  server using given credentials.
  */
 export const connect = ({
   url,
@@ -25,17 +32,25 @@ export const connect = ({
   password,
   onConnectionStatusChange,
   onMessageReceived,
+  onContactsLoaded,
 }: {
   url: string;
   username: string;
   password: string;
   onConnectionStatusChange?: (status: ConnectionStatus) => void;
   onMessageReceived?: (message: Element) => void;
+  onContactsLoaded?: (contacts: Contact[]) => void;
 }): Strophe.Connection => {
   const connection = new Connection(url);
 
-  connection.connect(username, password, status => {
+  connection.connect(username, password, async status => {
     if (status === Status.CONNECTED) {
+      const contacts = await getContactsList({ connection });
+
+      if (onContactsLoaded) {
+        onContactsLoaded(contacts);
+      }
+
       if (onMessageReceived) {
         connection.addHandler(
           message => {
@@ -57,6 +72,45 @@ export const connect = ({
   });
 
   return connection;
+};
+
+/**
+ *  Fetches contacts list from XMPP server.
+ */
+export const getContactsList = async ({
+  connection,
+}: {
+  connection: Strophe.Connection;
+}): Promise<Contact[]> => {
+  const query = $iq({
+    type: 'get',
+  }).c('query', {
+    xmlns: 'jabber:iq:roster',
+  });
+
+  const response = await sendQuery({ connection, query });
+
+  /* TODO: Handle 0 contacts */
+  /* TODO: Handle 1 contact */
+
+  return response.query.item.map((element: Dictionary) => element.attributes);
+};
+
+/**
+ *  Sends an info query to XMPP server.
+ */
+export const sendQuery = ({
+  connection,
+  query,
+}: {
+  connection: Strophe.Connection;
+  query: Strophe.Builder;
+}): Promise<Dictionary> => {
+  return new Promise(resolve => {
+    connection.sendIQ(query, response => {
+      return resolve(parseResponse(response));
+    });
+  });
 };
 
 /**
@@ -82,6 +136,10 @@ export const sendMessage = ({
     .t(text);
 
   connection.send(message);
+};
+
+export const parseResponse = (xml: Element): Dictionary => {
+  return parseXml(xml.innerHTML);
 };
 
 /**
