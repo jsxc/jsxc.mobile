@@ -66,17 +66,18 @@ const Login = (props: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 30,
   },
   header: {
-    margin: 8,
+    alignSelf: 'center',
+    margin: 16,
   },
   textInput: {
     margin: 8,
   },
   button: {
-    margin: 8,
+    marginHorizontal: 8,
+    marginVertical: 16,
   },
 });
 

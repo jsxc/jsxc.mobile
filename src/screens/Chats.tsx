@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Layout, Text, Avatar, List, ListItem } from 'react-native-ui-kitten';
 import { useXmpp } from '../xmpp';
 
@@ -15,7 +15,7 @@ const Chats = () => {
       <List
         data={state.data.contacts}
         renderItem={({ item }) => (
-          <ListItem style={styles.listItem}>
+          <ListItem>
             <Avatar
               style={styles.avatar}
               source={{
@@ -27,7 +27,6 @@ const Chats = () => {
             <Text>{item.name || item.jid}</Text>
           </ListItem>
         )}
-        ListFooterComponent={<View style={styles.footer} />}
         keyExtractor={contact => contact.jid}
       />
     </Layout>
@@ -37,22 +36,15 @@ const Chats = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 30,
   },
   header: {
-    margin: 8,
     alignSelf: 'center',
-  },
-  listItem: {
-    borderTopColor: '#eee',
-    borderTopWidth: 0.5,
+    margin: 16,
   },
   avatar: {
     marginLeft: 8,
     marginRight: 16,
-  },
-  footer: {
-    borderTopColor: '#eee',
-    borderTopWidth: 0.5,
   },
 });
 
