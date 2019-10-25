@@ -1,1 +1,1 @@
-export { connect, sendMessage, decodeConnectionStatus } from './strophe';
+export { XmppProvider, useXmpp } from './context';

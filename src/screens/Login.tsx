@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Layout, Text, Input, Button } from 'react-native-ui-kitten';
+import { NavigationSwitchProp } from 'react-navigation';
+import { useXmpp } from '../xmpp';
 
-const Login = () => {
+type Props = {
+  navigation: NavigationSwitchProp;
+};
+
+const Login = (props: Props) => {
+  const { navigation } = props;
+
   const [url, setUrl] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const [state, actions] = useXmpp();
 
   return (
     <Layout style={styles.container}>
@@ -38,7 +48,8 @@ const Login = () => {
       <Button
         style={styles.button}
         onPress={() => {
-          console.log({ url, username, password });
+          actions.connect({ url, username, password });
+          navigation.navigate('Home');
         }}
       >
         Submit

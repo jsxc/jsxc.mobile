@@ -3,6 +3,7 @@ import { ApplicationProvider as StylesProvider } from 'react-native-ui-kitten';
 import { mapping, light as lightTheme } from '@eva-design/eva';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { Login, Chats } from './screens';
+import { XmppProvider } from './xmpp';
 
 const App = () => {
   const appNavigatorRoutes = {
@@ -23,7 +24,9 @@ const App = () => {
 
   return (
     <StylesProvider mapping={mapping} theme={lightTheme}>
-      <AppContainer />
+      <XmppProvider>
+        <AppContainer />
+      </XmppProvider>
     </StylesProvider>
   );
 };
