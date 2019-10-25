@@ -18,6 +18,7 @@ type Connection = {
 };
 
 type Data = {
+  contacts: strophe.Contact[];
   receivedMessages: Element[];
 };
 
@@ -43,6 +44,7 @@ export const XmppContext = createContext<[State, Actions]>([
       status: null,
     },
     data: {
+      contacts: [],
       receivedMessages: [],
     },
   },
@@ -66,6 +68,7 @@ export const XmppProvider: React.FC = ({ children }) => {
   });
 
   const [data, setData] = useState<Data>({
+    contacts: [],
     receivedMessages: [],
   });
 
@@ -84,7 +87,14 @@ export const XmppProvider: React.FC = ({ children }) => {
         },
         onMessageReceived: message => {
           setData(data => ({
+            ...data,
             receivedMessages: data.receivedMessages.concat(message),
+          }));
+        },
+        onContactsLoaded: contacts => {
+          setData(data => ({
+            ...data,
+            contacts,
           }));
         },
       });
