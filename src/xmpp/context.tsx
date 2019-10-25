@@ -14,7 +14,7 @@ type Credentials = {
 };
 
 type Connection = {
-  status: string;
+  status: strophe.ConnectionStatus;
 };
 
 type Data = {
@@ -35,12 +35,12 @@ type Actions = {
 export const XmppContext = createContext<[State, Actions]>([
   {
     credentials: {
-      url: '',
-      username: '',
-      password: '',
+      url: null,
+      username: null,
+      password: null,
     },
     connection: {
-      status: '',
+      status: null,
     },
     data: {
       receivedMessages: [],
@@ -56,13 +56,13 @@ export const XmppProvider: React.FC = ({ children }) => {
   const connectionRef = useRef<Strophe.Connection>();
 
   const [credentials, setCredentials] = useState<Credentials>({
-    url: '',
-    username: '',
-    password: '',
+    url: null,
+    username: null,
+    password: null,
   });
 
   const [connection, setConnection] = useState<Connection>({
-    status: '',
+    status: null,
   });
 
   const [data, setData] = useState<Data>({

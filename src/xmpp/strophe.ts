@@ -2,6 +2,19 @@ import { Strophe, $msg } from 'strophe.js';
 
 const { Connection, Status } = Strophe;
 
+export type ConnectionStatus =
+  | 'ERROR'
+  | 'CONNECTING'
+  | 'CONNFAIL'
+  | 'AUTHENTICATING'
+  | 'AUTHFAIL'
+  | 'CONNECTED'
+  | 'DISCONNECTED'
+  | 'DISCONNECTING'
+  | 'ATTACHED'
+  | 'REDIRECT'
+  | 'CONNTIMEOUT';
+
 /**
  *  Establishes a connection with an
  *  XMPP server using given credentials.
@@ -16,7 +29,7 @@ export const connect = ({
   url: string;
   username: string;
   password: string;
-  onConnectionStatusChange?: (status: string) => void;
+  onConnectionStatusChange?: (status: ConnectionStatus) => void;
   onMessageReceived?: (message: Element) => void;
 }): Strophe.Connection => {
   const connection = new Connection(url);
@@ -77,7 +90,9 @@ export const sendMessage = ({
  *
  *  http://strophe.im/strophejs/doc/1.3.4/files/strophe-umd-js.html#Strophe.Connection_Status_Constants
  */
-export const decodeConnectionStatus = (status: Strophe.Status): string => {
+export const decodeConnectionStatus = (
+  status: Strophe.Status,
+): ConnectionStatus => {
   switch (status) {
     case Status.ERROR:
       return 'ERROR';
