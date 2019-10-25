@@ -7,12 +7,12 @@ import { XmppProvider } from './xmpp';
 
 const App = () => {
   const appNavigatorRoutes = {
-    Authentication: { screen: Login },
-    Home: { screen: Chats },
+    Login: { screen: Login },
+    Chats: { screen: Chats },
   };
 
   const appNavigatorConfig = {
-    initialRouteName: 'Authentication',
+    initialRouteName: 'Login',
   };
 
   const AppNavigator = createSwitchNavigator(

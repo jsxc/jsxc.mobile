@@ -19,7 +19,7 @@ const Login = (props: Props) => {
 
   useEffect(() => {
     if (state.connection.status === 'CONNECTED') {
-      navigation.navigate('Home');
+      navigation.navigate('Chats');
     }
   }, [state.connection.status]);
 
