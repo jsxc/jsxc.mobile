@@ -6,6 +6,7 @@ import React, {
   createContext,
 } from 'react';
 import * as strophe from './strophe';
+import { match, info, success, warn } from '../utilities';
 
 type Credentials = {
   url: string;
@@ -83,19 +84,32 @@ export const XmppProvider: React.FC = ({ children }) => {
         username,
         password,
         onConnectionStatusChange: status => {
-          setConnection({ status });
+          setConnection({
+            status,
+          });
+
+          const loggingFunction = match([
+            { if: 'CONNECTED', then: success },
+            { if: 'AUTHFAIL', then: warn },
+          ])(info)(status);
+
+          loggingFunction('Connection status changed to:', status);
         },
         onMessageReceived: message => {
           setData(data => ({
             ...data,
             receivedMessages: data.receivedMessages.concat(message),
           }));
+
+          info('Message received:', message);
         },
         onContactsLoaded: contacts => {
           setData(data => ({
             ...data,
             contacts,
           }));
+
+          info('Contacts loaded:', contacts.length);
         },
       });
     }
@@ -113,6 +127,8 @@ export const XmppProvider: React.FC = ({ children }) => {
         to: connection.jid,
         text: messageToSend,
       });
+
+      info('Message sent:', messageToSend);
     }
   }, [messageToSend]);
 
