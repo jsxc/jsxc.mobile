@@ -15,10 +15,6 @@ const Chats = (props: Props) => {
 
   return (
     <Layout style={styles.container}>
-      <Text style={styles.header} category="h3">
-        Contacts
-      </Text>
-
       <List
         data={state.data.contacts}
         renderItem={({ item }) => (
@@ -47,11 +43,6 @@ const Chats = (props: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 30,
-  },
-  header: {
-    alignSelf: 'center',
-    margin: 16,
   },
   avatar: {
     marginLeft: 8,
