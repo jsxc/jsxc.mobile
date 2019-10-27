@@ -5,14 +5,31 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { Login, Chats, Chat } from './screens';
 import { XmppProvider } from './xmpp';
+import { colors } from './constants';
 
 const App = () => {
+  const theme = {
+    ...lightTheme,
+    'color-primary-default': colors.PRIMARY,
+    'color-primary-active': colors.PRIMARY_ACTIVE,
+  };
+
   const homeNavigatorRoutes = {
     Chats: { screen: Chats },
     Chat: { screen: Chat },
   };
 
-  const homeNavigatorConfig = {};
+  const homeNavigatorConfig = {
+    defaultNavigationOptions: () => ({
+      headerStyle: {
+        backgroundColor: colors.PRIMARY,
+      },
+      headerTitleStyle: {
+        color: 'white',
+      },
+      headerTintColor: 'white',
+    }),
+  };
 
   const HomeNavigator = createStackNavigator(
     homeNavigatorRoutes,
@@ -36,7 +53,7 @@ const App = () => {
   const AppContainer = createAppContainer(AppNavigator);
 
   return (
-    <StylesProvider mapping={mapping} theme={lightTheme}>
+    <StylesProvider mapping={mapping} theme={theme}>
       <XmppProvider>
         <AppContainer />
       </XmppProvider>
