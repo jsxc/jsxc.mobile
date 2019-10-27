@@ -1,9 +1,16 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Layout, Text, Avatar, List, ListItem } from 'react-native-ui-kitten';
+import { NavigationStackProp } from 'react-navigation-stack';
 import { useXmpp } from '../xmpp';
 
-const Chats = () => {
+type Props = {
+  navigation: NavigationStackProp;
+};
+
+const Chats = (props: Props) => {
+  const { navigation } = props;
+
   const [state, actions] = useXmpp();
 
   return (
@@ -15,7 +22,11 @@ const Chats = () => {
       <List
         data={state.data.contacts}
         renderItem={({ item }) => (
-          <ListItem>
+          <ListItem
+            onPress={() => {
+              navigation.navigate('Chat', { username: item.jid });
+            }}
+          >
             <Avatar
               style={styles.avatar}
               source={{
