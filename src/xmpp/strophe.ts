@@ -23,7 +23,7 @@ export type Contact = {
 };
 
 /**
- *  Establishes a connection with XMPP
+ *  Establishes a connection with an XMPP
  *  server using given credentials.
  */
 export const connect = ({
@@ -75,7 +75,7 @@ export const connect = ({
 };
 
 /**
- *  Fetches contacts list from XMPP server.
+ *  Fetches the viewer's contacts list.
  */
 export const getContactsList = async ({
   connection,
@@ -97,7 +97,7 @@ export const getContactsList = async ({
 };
 
 /**
- *  Sends an info query to XMPP server.
+ *  Sends an info query.
  */
 export const sendQuery = ({
   connection,
@@ -114,7 +114,7 @@ export const sendQuery = ({
 };
 
 /**
- *  Sends a direct message to a recipient.
+ *  Sends a message to a user.
  */
 export const sendMessage = ({
   connection,
