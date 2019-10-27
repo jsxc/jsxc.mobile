@@ -1,3 +1,2 @@
-export type Dictionary = {
-  [key: string]: any;
-};
+export { Dictionary } from './generic';
+export { Contact, Thread, Message, ConnectionStatus } from './xmpp';
