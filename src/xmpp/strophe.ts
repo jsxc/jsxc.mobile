@@ -85,7 +85,7 @@ export const getContactsList = async ({
   const query = $iq({
     type: 'get',
   }).c('query', {
-    xmlns: 'jabber:iq:roster',
+    xmlns: Strophe.NS.ROSTER,
   });
 
   const response = await sendQuery({ connection, query });
