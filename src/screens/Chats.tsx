@@ -31,7 +31,7 @@ const Chats = (props: Props) => {
               style={styles.avatar}
               source={{
                 uri:
-                  'https://images.unsplash.com/photo-1494790108377-be9c29b29330',
+                  'http://dental266-2i09v4zdrcmtpsrxer.stackpathdns.com/wp-content/uploads/2015/07/placeholder_avatar.png',
               }}
             />
 
