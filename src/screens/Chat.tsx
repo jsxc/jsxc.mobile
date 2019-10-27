@@ -1,8 +1,10 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Layout, Text } from 'react-native-ui-kitten';
+import { Layout } from 'react-native-ui-kitten';
+import { GiftedChat } from 'react-native-gifted-chat';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { useXmpp } from '../xmpp';
+import { getWindowWidth, getWindowHeight } from '../utilities';
 
 type Props = {
   navigation: NavigationStackProp<{ username: string }>;
@@ -17,17 +19,33 @@ const Chat = (props: Props) => {
 
   return (
     <Layout style={styles.container}>
-      <Text style={styles.header} category="h3">
-        Chat with {username}
-      </Text>
+      <GiftedChat
+        alwaysShowSend={true}
+        user={{ _id: state.credentials.username }}
+        messages={
+          [
+            /* TODO : Inject messages */
+          ]
+        }
+        onSend={([message]) => {
+          actions.sendMessage({
+            to: username,
+            text: message.text,
+          });
+        }}
+      />
     </Layout>
   );
 };
 
+Chat.navigationOptions = ({ navigation }) => ({
+  title: navigation.getParam('username'),
+});
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 30,
+    width: getWindowWidth(),
+    height: getWindowHeight() - 65,
   },
   header: {
     alignSelf: 'center',

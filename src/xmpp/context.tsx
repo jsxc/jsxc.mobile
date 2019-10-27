@@ -20,7 +20,14 @@ type Connection = {
 
 type Data = {
   contacts: strophe.Contact[];
+  /* TODO: Group messages by contact */
+  /* TODO: Parse Element into Message object */
   receivedMessages: Element[];
+};
+
+type Message = {
+  to: string;
+  text: string;
 };
 
 type State = {
@@ -31,7 +38,7 @@ type State = {
 
 type Actions = {
   connect: (credentials: Credentials) => void;
-  sendMessage: (message: string) => void;
+  sendMessage: (message: Message) => void;
 };
 
 export const XmppContext = createContext<[State, Actions]>([
@@ -73,7 +80,10 @@ export const XmppProvider: React.FC = ({ children }) => {
     receivedMessages: [],
   });
 
-  const [messageToSend, setMessageToSend] = useState<string>('');
+  const [messageToSend, setMessageToSend] = useState<Message>({
+    to: '',
+    text: '',
+  });
 
   useEffect(() => {
     const { url, username, password } = credentials;
@@ -118,14 +128,12 @@ export const XmppProvider: React.FC = ({ children }) => {
   }, [credentials]);
 
   useEffect(() => {
-    const connection = connectionRef.current;
-
-    if (connection && status === 'CONNECTED') {
+    if (connectionRef.current && connection.status === 'CONNECTED') {
       strophe.sendMessage({
-        connection,
-        from: connection.jid,
-        to: connection.jid,
-        text: messageToSend,
+        connection: connectionRef.current,
+        from: credentials.username,
+        to: messageToSend.to,
+        text: messageToSend.text,
       });
 
       info('Message sent:', messageToSend);
