@@ -11,6 +11,8 @@
     "@eva-design/eva": "^1.2.0",
     "consola": "^2.10.1",
     "expo": "^35.0.0",
+    "lodash.get": "^4.4.2",
+    "lodash.has": "^4.5.2",
     "react": "16.8.3",
     "react-dom": "16.8.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
@@ -26,6 +28,8 @@
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
+    "@types/lodash.get": "^4.4.6",
+    "@types/lodash.has": "^4.5.6",
     "@types/react": "^16.8.23",
     "@types/react-native": "^0.57.65",
     "@types/strophe.js": "^1.2.0",
@@ -41,7 +45,7 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx,json,css,md}": [
+    "*.{ts,tsx,json,css}": [
       "prettier --single-quote --trailing-comma all --write",
       "git add"
     ]
