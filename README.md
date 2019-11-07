@@ -26,4 +26,4 @@
 ### Running
 
 - `❯ yarn`
-- `❯ yarn web`
+- `❯ yarn start`
