@@ -5,7 +5,9 @@
 <h1 align="center">JSXC Mobile</h1>
 
 <div align="center">
-  <b>An <a href="https://xmpp.org">XMPP</a> client built with <a href="https://facebook.github.io/react-native">React Native</a> & <a href="https://expo.io">Expo</a></b>
+  <a href="https://expo.io/" target="_blank"><img alt="Documentation" src="https://img.shields.io/badge/Runs%20with%20Expo-4630EB.svg?style=flat-square&logo=EXPO&labelColor=f3f3f3&logoColor=000" /></a>
+
+  <p>An <a href="https://xmpp.org">XMPP</a> client built with <a href="https://facebook.github.io/react-native">React Native</a></p>
 </div>
 
 <br />
