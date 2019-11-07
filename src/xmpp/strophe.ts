@@ -1,26 +1,10 @@
-import { Strophe, $msg, $iq } from 'strophe.js';
+import { Strophe, $msg, $iq, $pres } from 'strophe.js';
+import has from 'lodash.has';
+import get from 'lodash.get';
 import { parseXml } from '../utilities';
-import { Dictionary } from '../types';
+import { Message, Contact, ConnectionStatus, Dictionary } from '../types';
 
-const { Connection, Status } = Strophe;
-
-export type ConnectionStatus =
-  | 'ERROR'
-  | 'CONNECTING'
-  | 'CONNFAIL'
-  | 'AUTHENTICATING'
-  | 'AUTHFAIL'
-  | 'CONNECTED'
-  | 'DISCONNECTED'
-  | 'DISCONNECTING'
-  | 'ATTACHED'
-  | 'REDIRECT'
-  | 'CONNTIMEOUT';
-
-export type Contact = {
-  jid: string;
-  name?: string;
-};
+const { getBareJidFromJid, Connection, Status } = Strophe;
 
 /**
  *  Establishes a connection with an XMPP
@@ -31,20 +15,26 @@ export const connect = ({
   username,
   password,
   onConnectionStatusChange,
-  onMessageReceived,
   onContactsLoaded,
+  onMessageReceived,
 }: {
   url: string;
   username: string;
   password: string;
   onConnectionStatusChange?: (status: ConnectionStatus) => void;
-  onMessageReceived?: (message: Element) => void;
   onContactsLoaded?: (contacts: Contact[]) => void;
+  onMessageReceived?: (message: Message) => void;
 }): Strophe.Connection => {
   const connection = new Connection(url);
 
   connection.connect(username, password, async status => {
-    if (status === Status.CONNECTED) {
+    const connectionStatus = decodeConnectionStatus(status);
+
+    if (onConnectionStatusChange) {
+      onConnectionStatusChange(connectionStatus);
+    }
+
+    if (connectionStatus === 'CONNECTED') {
       const contacts = await getContactsList({ connection });
 
       if (onContactsLoaded) {
@@ -53,21 +43,31 @@ export const connect = ({
 
       if (onMessageReceived) {
         connection.addHandler(
-          message => {
-            onMessageReceived(message);
+          stanza => {
+            const parsedStanza = parseStanza(stanza);
+
+            /* TODO: Refine code */
+            if (has(parsedStanza, 'message.body')) {
+              onMessageReceived({
+                from: extractBareJid(
+                  get(parsedStanza, 'message.attributes.from'),
+                ),
+                to: get(parsedStanza, 'message.attributes.to'),
+                text: get(parsedStanza, 'message.body._text'),
+              });
+            }
+
             return true;
           },
           null,
           'message',
-          null,
+          'chat',
           null,
           null,
         );
-      }
-    }
 
-    if (onConnectionStatusChange) {
-      onConnectionStatusChange(decodeConnectionStatus(status));
+        connection.send($pres().tree());
+      }
     }
   });
 
@@ -93,7 +93,9 @@ export const getContactsList = async ({
   /* TODO: Handle 0 contacts */
   /* TODO: Handle 1 contact */
 
-  return response.query.item.map((element: Dictionary) => element.attributes);
+  return response.iq.query.item.map(
+    (element: Dictionary) => element.attributes,
+  );
 };
 
 /**
@@ -107,8 +109,8 @@ export const sendQuery = ({
   query: Strophe.Builder;
 }): Promise<Dictionary> => {
   return new Promise(resolve => {
-    connection.sendIQ(query, response => {
-      return resolve(parseResponse(response));
+    connection.sendIQ(query, stanza => {
+      return resolve(parseStanza(stanza));
     });
   });
 };
@@ -138,8 +140,19 @@ export const sendMessage = ({
   connection.send(message);
 };
 
-export const parseResponse = (xml: Element): Dictionary => {
-  return parseXml(xml.innerHTML);
+/**
+ *  Converts an XML stanza to a JS object.
+ */
+export const parseStanza = (xml: Element): Dictionary => {
+  return parseXml(xml.outerHTML);
+};
+
+/**
+ *  Removes the resource component from a full
+ *  JID to get a bare JID.
+ */
+export const extractBareJid = (fullJid: string): string => {
+  return getBareJidFromJid(fullJid);
 };
 
 /**

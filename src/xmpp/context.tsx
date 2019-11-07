@@ -5,8 +5,10 @@ import React, {
   useContext,
   createContext,
 } from 'react';
+import produce from 'immer';
 import * as strophe from './strophe';
 import { match, info, success, warn } from '../utilities';
+import { Contact, Thread, Message, ConnectionStatus } from '../types';
 
 type Credentials = {
   url: string;
@@ -15,19 +17,12 @@ type Credentials = {
 };
 
 type Connection = {
-  status: strophe.ConnectionStatus;
+  status: ConnectionStatus;
 };
 
 type Data = {
-  contacts: strophe.Contact[];
-  /* TODO: Group messages by contact */
-  /* TODO: Parse Element into Message object */
-  receivedMessages: Element[];
-};
-
-type Message = {
-  to: string;
-  text: string;
+  contacts: Contact[];
+  threads: Thread[];
 };
 
 type State = {
@@ -53,7 +48,7 @@ export const XmppContext = createContext<[State, Actions]>([
     },
     data: {
       contacts: [],
-      receivedMessages: [],
+      threads: [],
     },
   },
   {
@@ -77,10 +72,11 @@ export const XmppProvider: React.FC = ({ children }) => {
 
   const [data, setData] = useState<Data>({
     contacts: [],
-    receivedMessages: [],
+    threads: [],
   });
 
   const [messageToSend, setMessageToSend] = useState<Message>({
+    from: '',
     to: '',
     text: '',
   });
@@ -105,21 +101,37 @@ export const XmppProvider: React.FC = ({ children }) => {
 
           loggingFunction('Connection status changed to:', status);
         },
-        onMessageReceived: message => {
-          setData(data => ({
-            ...data,
-            receivedMessages: data.receivedMessages.concat(message),
+        onContactsLoaded: contacts => {
+          const threads = contacts.map(contact => ({
+            with: contact.jid,
+            messages: [],
           }));
 
-          info('Message received:', message);
-        },
-        onContactsLoaded: contacts => {
           setData(data => ({
             ...data,
             contacts,
+            threads,
           }));
 
           info('Contacts loaded:', contacts.length);
+        },
+        onMessageReceived: message => {
+          /* TODO: Append message to corresponding thread */
+
+          /* TODO: Refactor into reusable function */
+          setData(data => {
+            /* TODO: Account for non-existent thread */
+            const threadIndex = data.threads.findIndex(
+              thread => thread.with === message.from,
+            );
+
+            /* TODO: Refine code */
+            return produce(data, draftData => {
+              draftData.threads[threadIndex].messages.unshift(message);
+            });
+          });
+
+          info('Message received:', message);
         },
       });
     }
@@ -131,9 +143,22 @@ export const XmppProvider: React.FC = ({ children }) => {
     if (connectionRef.current && connection.status === 'CONNECTED') {
       strophe.sendMessage({
         connection: connectionRef.current,
-        from: credentials.username,
+        from: messageToSend.from,
         to: messageToSend.to,
         text: messageToSend.text,
+      });
+
+      /* TODO: Refactor into reusable function */
+      setData(data => {
+        /* TODO: Account for non-existent thread */
+        const threadIndex = data.threads.findIndex(
+          thread => thread.with === messageToSend.to,
+        );
+
+        /* TODO: Refine code */
+        return produce(data, draftData => {
+          draftData.threads[threadIndex].messages.push(messageToSend);
+        });
       });
 
       info('Message sent:', messageToSend);
