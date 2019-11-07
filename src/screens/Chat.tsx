@@ -5,31 +5,59 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { useXmpp } from '../xmpp';
 import { getWindowWidth, getWindowHeight } from '../utilities';
+import { Message } from '../types';
+
+/* TODO: Send messages & append to list */
+/* TODO: Recieve messages & append to list */
+
+type NavigationParams = {
+  username: string;
+};
 
 type Props = {
-  navigation: NavigationStackProp<{ username: string }>;
+  navigation: NavigationStackProp<NavigationParams>;
+};
+
+/**
+ *  Adapts messages to the format that
+ *  <GiftedChat /> requires.
+ */
+const adaptMessages = (messages: Message[]) => {
+  return messages.map(message => ({
+    text: message.text,
+    createdAt: Date.now(),
+    user: {
+      _id: message.from,
+      name: message.from,
+      avatar:
+        'http://dental266-2i09v4zdrcmtpsrxer.stackpathdns.com/wp-content/uploads/2015/07/placeholder_avatar.png',
+    },
+  }));
 };
 
 const Chat = (props: Props) => {
   const { navigation } = props;
 
-  const username = navigation.getParam('username');
-
   const [state, actions] = useXmpp();
+
+  /* TODO: Implement state.data.getThread('jid') */
+
+  /* TODO: Refactor into reusable function */
+  /* TODO: Account for non-existent thread */
+  const thread = state.data.threads.find(
+    thread => thread.with === navigation.getParam('username'),
+  );
 
   return (
     <Layout style={styles.container}>
       <GiftedChat
         alwaysShowSend={true}
         user={{ _id: state.credentials.username }}
-        messages={
-          [
-            /* TODO : Inject messages */
-          ]
-        }
+        messages={adaptMessages(thread.messages)}
         onSend={([message]) => {
           actions.sendMessage({
-            to: username,
+            from: state.credentials.username,
+            to: navigation.getParam('username'),
             text: message.text,
           });
         }}
