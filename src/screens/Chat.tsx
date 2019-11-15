@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Layout } from 'react-native-ui-kitten';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { useXmpp } from '../xmpp';
+import { useXmpp } from '../hooks';
 import { getWindowWidth, getWindowHeight } from '../utilities';
 import { Message } from '../types';
 

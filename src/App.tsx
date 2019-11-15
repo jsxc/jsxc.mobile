@@ -4,7 +4,7 @@ import { mapping, light as lightTheme } from '@eva-design/eva';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { Login, Chats, Chat } from './screens';
-import { XmppProvider } from './xmpp';
+import { XmppProvider } from './hooks';
 import { colors } from './constants';
 
 const App = () => {

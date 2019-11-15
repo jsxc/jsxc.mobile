@@ -6,7 +6,7 @@ import React, {
   createContext,
 } from 'react';
 import produce from 'immer';
-import * as strophe from './strophe';
+import * as strophe from '../core';
 import { match, info, success, warn } from '../utilities';
 import { Contact, Thread, Message, ConnectionStatus } from '../types';
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { Layout, Text, Input, Button } from 'react-native-ui-kitten';
 import { NavigationSwitchProp } from 'react-navigation';
-import { useXmpp } from '../xmpp';
+import { useXmpp } from '../hooks';
 
 type Props = {
   navigation: NavigationSwitchProp;

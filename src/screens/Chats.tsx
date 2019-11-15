@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Layout, Text, Avatar, List, ListItem } from 'react-native-ui-kitten';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { useXmpp } from '../xmpp';
+import { useXmpp } from '../hooks';
 
 type Props = {
   navigation: NavigationStackProp;
