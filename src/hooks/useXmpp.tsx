@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import produce from 'immer';
 import * as strophe from '../core';
-import { match, info, success, warn } from '../utilities';
+import { match, warn, success, info, debug } from '../utilities';
 import { Contact, Thread, Message, ConnectionStatus } from '../types';
 
 type Credentials = {
@@ -36,6 +36,10 @@ type Actions = {
   sendMessage: (message: Message) => void;
 };
 
+type ProviderProps = {
+  log?: boolean;
+};
+
 export const XmppContext = createContext<[State, Actions]>([
   {
     credentials: {
@@ -57,7 +61,9 @@ export const XmppContext = createContext<[State, Actions]>([
   },
 ]);
 
-export const XmppProvider: React.FC = ({ children }) => {
+export const XmppProvider: React.FC<ProviderProps> = props => {
+  const { children, log = true } = props;
+
   const connectionRef = useRef<Strophe.Connection>();
 
   const [credentials, setCredentials] = useState<Credentials>({
@@ -94,12 +100,14 @@ export const XmppProvider: React.FC = ({ children }) => {
             status,
           });
 
-          const loggingFunction = match([
-            { if: 'CONNECTED', then: success },
-            { if: 'AUTHFAIL', then: warn },
-          ])(info)(status);
+          if (log) {
+            const loggingFunction = match([
+              { if: 'CONNECTED', then: success },
+              { if: 'AUTHFAIL', then: warn },
+            ])(info)(status);
 
-          loggingFunction('Connection status changed to:', status);
+            loggingFunction('Connection status changed to:', status);
+          }
         },
         onContactsLoaded: contacts => {
           const threads = contacts.map(contact => ({
@@ -113,7 +121,9 @@ export const XmppProvider: React.FC = ({ children }) => {
             threads,
           }));
 
-          info('Contacts loaded:', contacts.length);
+          if (log) {
+            info('Contacts loaded:', contacts.length);
+          }
         },
         onMessageReceived: message => {
           /* TODO: Append message to corresponding thread */
@@ -131,8 +141,20 @@ export const XmppProvider: React.FC = ({ children }) => {
             });
           });
 
-          info('Message received:', message);
+          if (log) {
+            info('Message received:', message);
+          }
         },
+        onRawInput: log
+          ? data => {
+              debug('Raw input:', data);
+            }
+          : null,
+        onRawOutput: log
+          ? data => {
+              debug('Raw output:', data);
+            }
+          : null,
       });
     }
 

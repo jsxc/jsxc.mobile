@@ -22,6 +22,8 @@ export const connect = ({
   onConnectionStatusChange,
   onContactsLoaded,
   onMessageReceived,
+  onRawInput,
+  onRawOutput,
 }: {
   url: string;
   username: string;
@@ -29,8 +31,18 @@ export const connect = ({
   onConnectionStatusChange?: (status: ConnectionStatus) => void;
   onContactsLoaded?: (contacts: Contact[]) => void;
   onMessageReceived?: (message: Message) => void;
+  onRawInput?: (data: string) => void;
+  onRawOutput?: (data: string) => void;
 }): Strophe.Connection => {
   const connection = new Connection(url);
+
+  if (onRawInput) {
+    connection.rawInput = onRawInput;
+  }
+
+  if (onRawOutput) {
+    connection.rawOutput = onRawOutput;
+  }
 
   connection.connect(username, password, async status => {
     const connectionStatus = decodeConnectionStatus(status);
