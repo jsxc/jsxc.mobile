@@ -2,7 +2,7 @@ import { Strophe } from 'strophe.js';
 import { xml2js } from 'xml-js';
 import { Dictionary, ConnectionStatus } from '../types';
 
-const { getBareJidFromJid, Status } = Strophe;
+const { getBareJidFromJid, getResourceFromJid, Status } = Strophe;
 
 /**
  *  Converts an XML stanza to a JS object.
@@ -27,6 +27,14 @@ export const parseXml = (xml: string): Dictionary => {
  */
 export const extractBareJid = (fullJid: string): string => {
   return getBareJidFromJid(fullJid);
+};
+
+/**
+ *  Extracts the resource component from a full
+ *  JID.
+ */
+export const extractResource = (fullJid: string): string => {
+  return getResourceFromJid(fullJid);
 };
 
 /**
