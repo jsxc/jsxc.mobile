@@ -3,6 +3,11 @@ export type Contact = {
   name?: string;
 };
 
+export type Room = {
+  jid: string;
+  name: string;
+};
+
 export type Thread = {
   with: string;
   messages: Message[];

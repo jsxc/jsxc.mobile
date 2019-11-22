@@ -1,2 +1,2 @@
 export { Dictionary } from './generic';
-export { Contact, Thread, Message, ConnectionStatus } from './xmpp';
+export { Contact, Room, Thread, Message, ConnectionStatus } from './xmpp';
