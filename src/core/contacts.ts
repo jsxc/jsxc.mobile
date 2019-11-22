@@ -3,7 +3,7 @@ import { sendQuery } from './queries';
 import { Dictionary, Contact } from '../types';
 
 /**
- *  Fetches the viewer's contacts list.
+ *  Fetches the viewer's roster.
  */
 export const getContactsList = async ({
   connection,
