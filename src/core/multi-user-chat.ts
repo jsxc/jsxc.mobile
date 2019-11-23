@@ -1,5 +1,7 @@
 import { Strophe } from 'strophe.js';
-import { parseStanza } from './utilities';
+import has from 'lodash.has';
+import get from 'lodash.get';
+import { parseStanza, extractBareJid, extractResource } from './utilities';
 import { Dictionary, Room } from '../types';
 
 /**
@@ -20,6 +22,35 @@ export const getRooms = async ({
   );
 
   return rooms;
+};
+
+export const joinRoom = ({
+  connection,
+  roomJid,
+  nickname,
+  onMessageReceived,
+}: {
+  connection: Strophe.Connection;
+  roomJid: string;
+  nickname?: string;
+  onMessageReceived?: (message: Dictionary) => void;
+}): void => {
+  connection.muc.join(roomJid, nickname, data => {
+    const parsedData = parseStanza(data);
+
+    if (has(parsedData, 'message.body')) {
+      if (onMessageReceived) {
+        onMessageReceived({
+          /* TODO: How to get JID instead of nickname? */
+          from: extractResource(get(parsedData, 'message.attributes.from')),
+          to: extractBareJid(get(parsedData, 'message.attributes.to')),
+          text: get(parsedData, 'message.body._text'),
+        });
+      }
+    }
+
+    return true;
+  });
 };
 
 const listRoomsAsync = ({
