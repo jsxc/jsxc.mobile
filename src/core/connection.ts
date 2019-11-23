@@ -3,6 +3,7 @@ import has from 'lodash.has';
 import get from 'lodash.get';
 import { plugins, addPlugins } from './plugins';
 import { getContactsList } from './contacts';
+import { getRooms, joinRoom } from './multi-user-chat';
 import {
   parseStanza,
   extractBareJid,
@@ -67,13 +68,17 @@ export const connect = ({
         onContactsLoaded(contacts);
       }
 
-      if (onMessageReceived) {
-        connection.addHandler(
-          stanza => {
-            const parsedStanza = parseStanza(stanza);
+      /* Set online status */
+      connection.send($pres().tree());
 
-            /* TODO: Refine code */
-            if (has(parsedStanza, 'message.body')) {
+      /* Handle incoming messages */
+      connection.addHandler(
+        stanza => {
+          const parsedStanza = parseStanza(stanza);
+
+          /* TODO: Refine code */
+          if (has(parsedStanza, 'message.body')) {
+            if (onMessageReceived) {
               onMessageReceived({
                 from: extractBareJid(
                   get(parsedStanza, 'message.attributes.from'),
@@ -82,18 +87,16 @@ export const connect = ({
                 text: get(parsedStanza, 'message.body._text'),
               });
             }
+          }
 
-            return true;
-          },
-          null,
-          'message',
-          'chat',
-          null,
-          null,
-        );
-
-        connection.send($pres().tree());
-      }
+          return true;
+        },
+        null,
+        'message',
+        'chat',
+        null,
+        null,
+      );
     }
   });
 
