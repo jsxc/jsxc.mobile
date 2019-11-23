@@ -35,6 +35,7 @@ export const joinRoom = ({
   nickname?: string;
   onMessageReceived?: (message: Dictionary) => void;
 }): void => {
+  /* TODO: Account for nickname conflict error */
   connection.muc.join(roomJid, nickname, data => {
     const parsedData = parseStanza(data);
 
