@@ -1,6 +1,7 @@
 import { Strophe, $pres } from 'strophe.js';
 import has from 'lodash.has';
 import get from 'lodash.get';
+import { plugins, addPlugins } from './plugins';
 import { getContactsList } from './contacts';
 import {
   parseStanza,
@@ -35,6 +36,8 @@ export const connect = ({
   onRawOutput?: (data: string) => void;
 }): Strophe.Connection => {
   const connection = new Connection(url);
+
+  addPlugins([plugins.MUC]);
 
   if (onRawInput) {
     connection.rawInput = onRawInput;
