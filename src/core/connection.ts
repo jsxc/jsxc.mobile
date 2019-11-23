@@ -1,6 +1,4 @@
 import { Strophe, $pres } from 'strophe.js';
-import has from 'lodash.has';
-import get from 'lodash.get';
 import { plugins, addPlugins } from './plugins';
 import { getContactsList } from './contacts';
 import { getRooms, joinRoom } from './multi-user-chat';
@@ -9,6 +7,7 @@ import {
   extractBareJid,
   decodeConnectionStatus,
 } from './utilities';
+import { has, get } from '../utilities';
 import { Message, Contact, ConnectionStatus } from '../types';
 
 const { Connection } = Strophe;
@@ -77,14 +76,14 @@ export const connect = ({
           const parsedStanza = parseStanza(stanza);
 
           /* TODO: Refine code */
-          if (has(parsedStanza, 'message.body')) {
+          if (has('message.body')(parsedStanza)) {
             if (onMessageReceived) {
               onMessageReceived({
                 from: extractBareJid(
-                  get(parsedStanza, 'message.attributes.from'),
+                  get('message.attributes.from')(parsedStanza),
                 ),
-                to: get(parsedStanza, 'message.attributes.to'),
-                text: get(parsedStanza, 'message.body._text'),
+                to: get('message.attributes.to')(parsedStanza),
+                text: get('message.body._text')(parsedStanza),
               });
             }
           }

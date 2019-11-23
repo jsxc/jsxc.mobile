@@ -1,7 +1,6 @@
 import { Strophe } from 'strophe.js';
-import has from 'lodash.has';
-import get from 'lodash.get';
 import { parseStanza, extractBareJid, extractResource } from './utilities';
+import { has, get } from '../utilities';
 import { Dictionary, Room } from '../types';
 
 /**
@@ -39,13 +38,13 @@ export const joinRoom = ({
   connection.muc.join(roomJid, nickname, data => {
     const parsedData = parseStanza(data);
 
-    if (has(parsedData, 'message.body')) {
+    if (has('message.body')(parsedData)) {
       if (onMessageReceived) {
         onMessageReceived({
           /* TODO: How to get JID instead of nickname? */
-          from: extractResource(get(parsedData, 'message.attributes.from')),
-          to: extractBareJid(get(parsedData, 'message.attributes.to')),
-          text: get(parsedData, 'message.body._text'),
+          from: extractResource(get('message.attributes.from')(parsedData)),
+          to: extractBareJid(get('message.attributes.to')(parsedData)),
+          text: get('message.body._text')(parsedData),
         });
       }
     }
