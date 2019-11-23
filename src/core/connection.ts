@@ -48,6 +48,11 @@ export const connect = ({
   }
 
   connection.connect(username, password, async status => {
+    /**
+     *  Strophe invokes this callback whenever the connection
+     *  status changes.
+     */
+
     const connectionStatus = decodeConnectionStatus(status);
 
     if (onConnectionStatusChange) {
@@ -55,6 +60,7 @@ export const connect = ({
     }
 
     if (connectionStatus === 'CONNECTED') {
+      /* Retrieve contacts list */
       const contacts = await getContactsList({ connection });
 
       if (onContactsLoaded) {
