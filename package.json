@@ -30,7 +30,7 @@
         "jsxc": "github:jsxc/jsxc#refactoring",
         "jsxc-plugin-single-page": "github:jsxc/jsxc-plugin-single-page",
         "material-ui": "^1.0.0-beta.32",
-        "npm": "^2.15.12",
+        "npm": "^6.13.4",
         "plist": "^1.2.0",
         "q": "^1.5.1",
         "react": "^16.2.0",
