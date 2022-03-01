@@ -31,7 +31,7 @@
         "jsxc-plugin-single-page": "github:jsxc/jsxc-plugin-single-page",
         "material-ui": "^1.0.0-beta.32",
         "npm": "^2.15.12",
-        "plist": "^1.2.0",
+        "plist": "^3.0.4",
         "q": "^1.5.1",
         "react": "^16.2.0",
         "react-dom": "^16.2.0"
